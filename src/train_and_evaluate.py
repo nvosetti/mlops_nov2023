@@ -23,6 +23,9 @@ def train_and_evaluate(config_path):
     random_state = config["base"]["random_state"]
     model_dir = config["model_dir"]
 
+    ###############################################################################
+    # parameters for training
+
     alpha = config["estimators"]["ElasticNet"]["params"]["alpha"]
     l1_ratio = config["estimators"]["ElasticNet"]["params"]["l1_ratio"]
 
@@ -36,6 +39,9 @@ def train_and_evaluate(config_path):
 
     train_x = train.drop(target, axis=1)
     test_x = train.drop(target, axis=1)
+
+    ###############################################################################
+    # training model
 
     lr = ElasticNet(alpha=alpha, 
                     l1_ratio=l1_ratio, 
@@ -51,6 +57,39 @@ def train_and_evaluate(config_path):
     print("RMSE : %s" % rmse)
     print("MAE : %s" % mae)
     print("R2 : %s" % r2)
+
+    ###############################################################################
+    # Generating metric file
+
+    scores_file = config["reports"]["scores"]
+    params_file = config["reports"]["params"]
+
+    with open(scores_file, "w") as f :
+        scores = {
+            "rmse" : rmse,
+            "mae" : mae,
+            "r2" : r2
+        }
+        json.dump(scores, f, indent=4)
+    
+    with open(params_file, "w") as f :
+        params = {
+            "alpha" : alpha,
+            "l1_ratio" : l1_ratio
+        }
+        json.dump(params, f, indent=4)
+
+
+    ###############################################################################
+    # Generating joblib file
+     
+    os.makedirs(model_dir, exist_ok=True)
+    model_path = os.path.join(model_dir, "model.joblib")
+    joblib.dump(lr, model_path)
+
+ 
+
+
 
 if __name__ == "__main__" :
     args = argparse.ArgumentParser()
