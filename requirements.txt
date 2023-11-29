@@ -1,3 +1,7 @@
+# local package install
+
+-e .
+
 dvc
 dvc[gdrive]
 scikit-learn
@@ -7,4 +11,3 @@ flake8
 flask
 gunicorn
 pandas
-yaml
