@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, jsonify
 import os
-
+from prediction_service import prediction
 import numpy as np
 
 
@@ -13,34 +13,21 @@ app = Flask(__name__, static_folder=static_dir, template_folder=template_dir)
 
 
 
-
-def api_response(request) :
-    try:
-        data = np.array([list(request.json.values())])
-        response = predict(data)
-        response = {"response":response}
-        return response
-    except Exception as e:
-        print(e)
-        error = {"error" : "Something went wrong !! Try again "}
-        return error
-
-
 @app.route("/", methods=['GET', "POST"])
 def index() :
     if request.method == "POST" :
         try :
             if request.form :
-                data = dict(request.form).values()
-                data = [list(map(float, data))]
-                response = predict(data)
+                dict_req = dict(request.form)
+                response = prediction.form_response(dict_req)
                 return render_template("index.html", response=response)
             elif request.json :
-                response = api_response(request)
+                response = prediction.api_response(request.json)
                 return jsonify(response)
         except Exception as e :
             print(e)
             error = {"error" : "Something went wrong !! Try again "}
+            error = {"error" : e}
             return render_template("404.html", error=error)
     else :
         return render_template("index.html")
