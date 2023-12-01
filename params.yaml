@@ -29,3 +29,7 @@ reports :
   scores : report/scores.json
 
 webapp_model_dir : prediction_service/model/model.joblib
+
+request_param_file : param.json
+
+url : 'http://localhost:5000'

@@ -34,3 +34,11 @@ stages :
     outs:
       - saved_models/model.joblib
 
+  call_and_testmicroservice:
+    cmd: python request_app.py
+    deps:
+      - request_app.py
+    params:
+      - request_param_file
+
+

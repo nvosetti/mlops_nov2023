@@ -72,3 +72,23 @@ stages:
       hash: md5
       md5: 695c4f47427b2a0bb8b5a0a4516867cf
       size: 1215
+  call_and_test:
+    cmd: python request_app.py
+    deps:
+    - path: request_app.py
+      hash: md5
+      md5: 96d572f2cdb7151d19b03f2bc6d5b6f6
+      size: 423
+    params:
+      params.yaml:
+        request_param_file: param.json
+  call_and_testmicroservice:
+    cmd: python request_app.py
+    deps:
+    - path: request_app.py
+      hash: md5
+      md5: e44068c159ee497acfb9fab4ea833cbc
+      size: 413
+    params:
+      params.yaml:
+        request_param_file: param.json
